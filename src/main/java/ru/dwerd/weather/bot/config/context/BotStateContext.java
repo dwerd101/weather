@@ -5,6 +5,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.dwerd.weather.bot.config.BotState;
 import ru.dwerd.weather.service.WeatherMoscowService;
+import ru.dwerd.weather.service.WeatherOtherServices;
 import ru.dwerd.weather.service.WeatherSaintPetersburgService;
 import ru.dwerd.weather.service.WeatherService;
 

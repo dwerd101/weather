@@ -23,7 +23,7 @@ public class TelegramFacade {
 
 
     public Optional<BotApiMethod<?>> handleUpdate(Update update) {
-
+        Message message = update.getMessage();
         if (update.hasCallbackQuery()) {
             CallbackQuery callbackQuery = update.getCallbackQuery();
             log.info("New callbackQuery from User: {}, userId: {}, with data1: {}", update.getCallbackQuery().getFrom().getUserName(),
@@ -31,14 +31,18 @@ public class TelegramFacade {
             return processCallbackQuery(callbackQuery);
         }
 
-        Message message = update.getMessage();
-        if (message != null && message.hasText()) {
+
+       else  if (message != null && message.hasText()) {
             log.info("New message from User:{}, chatId: {},  with text: {}",
                 message.getFrom().getUserName(), message.getChatId(), message.getText());
             Optional<SendMessage> optionalSendMessage = handleInputMessage(message);
             if (optionalSendMessage.isPresent()) {
                 return Optional.of(optionalSendMessage.get());
             }
+        }
+        else if(update.getMessage().getLocation()!=null) {
+            log.info("Отправка коррднатов");
+            return Optional.ofNullable(botStateContext.processInputMessage(BotState.OTHER,update.getMessage()));
         }
 
         return Optional.empty();
