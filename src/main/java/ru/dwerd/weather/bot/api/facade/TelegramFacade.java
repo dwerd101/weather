@@ -76,7 +76,7 @@ public class TelegramFacade {
 
         switch (inputMsg) {
             case "/start":
-                botState = BotState.MOSCOW;
+                botState = BotState.HELLO;
                 break;
             case "/Moscow":
             case "/moscow":
@@ -97,7 +97,7 @@ public class TelegramFacade {
             case "/how_change_weather":
             case "/How_Change_Weather":
                 replyMessage = new SendMessage(String.valueOf(message.getChatId()),
-                    "Если захотите поменять погоду в вашем городе, отправьте, пожалуйста, новую геопозицию");
+                    "Если захотите поменять погоду в вашем городе, пожалуйста, отправьте новую геопозицию");
                 return Optional.of(replyMessage);
             default:
                 return Optional.empty();
