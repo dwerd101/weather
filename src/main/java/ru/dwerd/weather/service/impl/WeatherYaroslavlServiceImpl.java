@@ -1,6 +1,7 @@
 package ru.dwerd.weather.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -10,29 +11,29 @@ import ru.dwerd.weather.feign.WeatherFeignClient;
 import ru.dwerd.weather.model.Condition;
 import ru.dwerd.weather.model.Fact;
 import ru.dwerd.weather.model.Weather;
-import ru.dwerd.weather.service.WeatherSaintPetersburgService;
+import ru.dwerd.weather.service.WeatherYaroslavlService;
 
 import java.util.Locale;
-
 @Service
 @RequiredArgsConstructor
-public class SaintPetersburgServiceImpl implements WeatherSaintPetersburgService {
+public class WeatherYaroslavlServiceImpl implements WeatherYaroslavlService {
     private final WeatherFeignClient weatherFeignClient;
     private final InlineKeyboardMarkup inlineMessageButtons;
-    private final  String yandexApiKey;
+    private final String yandexApiKey;
+
     @Override
     public SendMessage handle(Message message) {
         final long chatId = message.getChatId();
-        Weather weather = weatherFeignClient.getWeather(yandexApiKey,"59.9311","30.3609",true);
-        String meaasageWeather = getWeatherSaintPersburgNowFromYandexApiMessage(weather.getFact(),weather);
+        Weather weather = weatherFeignClient.getWeather(yandexApiKey,"57.6298700","39.8736800",true);
+        String meaasageWeather = getWeatherYaroslavlNowFromYandexApiMessage(weather.getFact(),weather);
         SendMessage replyToUser = new SendMessage(String.valueOf(chatId),meaasageWeather);
         replyToUser.setReplyMarkup(inlineMessageButtons);
         return replyToUser;
     }
     @Override
     public SendMessage handle(final long chatId) {
-        Weather weather = weatherFeignClient.getWeather(yandexApiKey,"59.9311","30.3609",true);
-        String meaasageWeather = getWeatherSaintPersburgNowFromYandexApiMessage(weather.getFact(),weather);
+        Weather weather = weatherFeignClient.getWeather(yandexApiKey,"57.6298700","39.8736800",true);
+        String meaasageWeather = getWeatherYaroslavlNowFromYandexApiMessage(weather.getFact(),weather);
         SendMessage sendMessage =new SendMessage(String.valueOf(chatId),meaasageWeather);
         sendMessage.setReplyMarkup(inlineMessageButtons);
         return sendMessage;
@@ -40,11 +41,11 @@ public class SaintPetersburgServiceImpl implements WeatherSaintPetersburgService
 
     @Override
     public BotState getHandlerName() {
-        return BotState.SAINT_PETERSBURG;
+        return BotState.YAROSLAVL;
     }
-    private String getWeatherSaintPersburgNowFromYandexApiMessage(Fact fact, Weather weather) {
+    private String getWeatherYaroslavlNowFromYandexApiMessage(Fact fact, Weather weather) {
         StringBuilder weatherStringBuilder = new StringBuilder();
-        weatherStringBuilder.append("Погода в Санкт-Петербурге сейчас:\n");
+        weatherStringBuilder.append("Погода в Ярославле сейчас:\n");
         weatherStringBuilder.append("Температура: ").append(fact.getTemp()).append("°C\n");
         weatherStringBuilder.append("Ощущаемая температура: ").append(fact.getFeelsLike()).append("°C\n");
         Condition condition = Condition.valueOf(weather.getFact().getCondition().toUpperCase(Locale.ROOT));

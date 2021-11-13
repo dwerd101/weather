@@ -8,6 +8,7 @@ import ru.dwerd.weather.service.WeatherMoscowService;
 import ru.dwerd.weather.service.WeatherOtherServices;
 import ru.dwerd.weather.service.WeatherSaintPetersburgService;
 import ru.dwerd.weather.service.WeatherService;
+import ru.dwerd.weather.service.WeatherYaroslavlService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +34,10 @@ public class BotStateContext {
         else if(currentState.equals(BotState.SAINT_PETERSBURG)) {
             WeatherSaintPetersburgService weatherSaintPetersburgService = (WeatherSaintPetersburgService) currentService;
             return weatherSaintPetersburgService.handle(chatId);
+        }
+        else if(currentState.equals(BotState.YAROSLAVL)) {
+            WeatherYaroslavlService weatherYaroslavlService = (WeatherYaroslavlService) currentService;
+            return weatherYaroslavlService .handle(chatId);
         }
         else return null;
     }

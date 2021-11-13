@@ -18,9 +18,10 @@ import java.util.Locale;
 public class WeatherOtherServiceImpl implements WeatherOtherServices {
     private final WeatherFeignClient weatherFeignClient;
     private final InlineKeyboardMarkup inlineMessageButtons;
+    private final String yandexApiKey;
     @Override
     public SendMessage handle(Message message) {
-        Weather weather = weatherFeignClient.getWeather("3ed5dbe8-670b-497b-99d0-350402bebb79",String.valueOf(message.getLocation().getLatitude()),
+        Weather weather = weatherFeignClient.getWeather(yandexApiKey,String.valueOf(message.getLocation().getLatitude()),
             String.valueOf( message.getLocation().getLongitude()),true);
         String meaasageWeather = getWeatherSaintPersburgNowFromYandexApiMessage(weather.getFact(),weather);
         SendMessage sendMessage =new SendMessage(String.valueOf(message.getChatId()),meaasageWeather);

@@ -15,19 +15,25 @@ public class InlineKeyboardMarkupConfig {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         InlineKeyboardButton buttonMoscow = new InlineKeyboardButton();
         InlineKeyboardButton buttonSaintPetersburg = new InlineKeyboardButton();
+        InlineKeyboardButton buttonYaroslavl = new InlineKeyboardButton();
         buttonMoscow.setText("Moscow");
         buttonMoscow.setCallbackData("buttonMoscow");
         buttonSaintPetersburg.setText("Saint-Petersburg");
         buttonSaintPetersburg.setCallbackData("buttonPetersburg");
+        buttonYaroslavl.setText("Yaroslavl");
+        buttonYaroslavl.setCallbackData("buttonYaroslavl");
 
 
         List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
         keyboardButtonsRow1.add(buttonMoscow);
         List<InlineKeyboardButton> keyboardButtonsRow2 = new ArrayList<>();
         keyboardButtonsRow1.add(buttonSaintPetersburg);
+        List<InlineKeyboardButton> keyboardButtonsRow3 = new ArrayList<>();
+        keyboardButtonsRow3.add(buttonYaroslavl);
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
         rowList.add(keyboardButtonsRow1);
         rowList.add(keyboardButtonsRow2);
+        rowList.add(keyboardButtonsRow3);
         inlineKeyboardMarkup.setKeyboard(rowList);
         return inlineKeyboardMarkup;
     }

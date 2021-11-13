@@ -68,24 +68,10 @@ public class TelegramFacade {
             case "/saint_petersburg":
                 botState = BotState.SAINT_PETERSBURG;
                 break;
-      /*      case "/Tomorrow":
-            case "/tomorrow":
-            case "/tomorrow@hse_ebot":
-                botState = BotState.TOMMOROW;
+            case "/Yaroslavl":
+            case "/yaroslavl":
+                botState = BotState.YAROSLAVL;
                 break;
-            case "/week":
-            case "/week@hse_ebot":
-                botState = BotState.WEEK;
-                break;
-            case "/wmn":
-            case "/wmn@hse_ebot":
-                botState = BotState.WEATHER_TODAY;
-                break;
-            case "/wmtodtom":
-            case "/wmtodtom@hse_ebot":
-                botState = BotState.WEATHER_TODAY_AND_TOMORROW;
-                break;
-                */
             default:
                 return Optional.empty();
 
@@ -110,6 +96,9 @@ public class TelegramFacade {
             case "buttonPetersburg":
                 replyMessage = botStateContext.processButton(BotState.SAINT_PETERSBURG, chatId);
                 return Optional.of(replyMessage);
+            case "buttonYaroslavl":
+                replyMessage = botStateContext.processButton(BotState.YAROSLAVL,chatId);
+                return  Optional.of(replyMessage);
         }
           /*  case "buttonTomorrow":
                 userDataCache.getUsersCurrentBotState(userId);
