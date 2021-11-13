@@ -80,20 +80,25 @@ public class TelegramFacade {
                 break;
             case "/Moscow":
             case "/moscow":
+            case "/moscow@over_weather_bot":
                 botState = BotState.MOSCOW;
                 break;
             case "/Saint_Petersburg":
             case "/saint_petersburg":
+            case "/saint_petersburg@over_weather_bot":
                 botState = BotState.SAINT_PETERSBURG;
                 break;
             case "/Yaroslavl":
             case "/yaroslavl":
+            case "/yaroslavl@over_weather_bot":
                 botState = BotState.YAROSLAVL;
                 break;
             case "/your_city":
             case "/Your_city":
+            case"/your_city@over_weather_bot":
                 botState = BotState.YOUR_CITY;
                 break;
+            case "/how_change_weather@over_weather_bot":
             case "/how_change_weather":
             case "/How_Change_Weather":
                 replyMessage = new SendMessage(String.valueOf(message.getChatId()),
