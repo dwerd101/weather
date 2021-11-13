@@ -5,38 +5,77 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import ru.dwerd.weather.bot.api.model.CacheUsers;
+import ru.dwerd.weather.bot.api.model.Users;
 import ru.dwerd.weather.bot.config.BotState;
+import ru.dwerd.weather.bot.mapper.UserMapper;
 import ru.dwerd.weather.feign.WeatherFeignClient;
 import ru.dwerd.weather.model.Condition;
 import ru.dwerd.weather.model.Fact;
 import ru.dwerd.weather.model.Weather;
-import ru.dwerd.weather.service.WeatherOtherServices;
+import ru.dwerd.weather.service.WeatherYourCityService;
 
 import java.util.Locale;
+
 @Service
 @RequiredArgsConstructor
-public class WeatherOtherServiceImpl implements WeatherOtherServices {
+public class WeatherYourCityServiceImpl implements WeatherYourCityService {
     private final WeatherFeignClient weatherFeignClient;
     private final InlineKeyboardMarkup inlineMessageButtons;
     private final String yandexApiKey;
+    private final CacheUsers cacheUsers;
+    private final UserMapper userMapper;
+
     @Override
     public SendMessage handle(Message message) {
-        Weather weather = weatherFeignClient.getWeather(yandexApiKey,String.valueOf(message.getLocation().getLatitude()),
+        if (cacheUsers.getUsers().containsKey(message.getChat().getId())) {
+            return getSendMessage(message);
+        } else {
+            SendMessage sendMessage = new SendMessage(String.valueOf(message.getChatId()), "Вы не отправили свои " +
+                "координаты для того, поэтому узнать погоду " +
+                "невозможно.\nПожалуйста, пришлите свою геолокацию");
+            sendMessage.setReplyMarkup(inlineMessageButtons);
+            return sendMessage;
+        }
+        // return getSendMessage(message);
+        //}
+       /* Weather weather = weatherFeignClient.getWeather(yandexApiKey,String.valueOf(message.getLocation()
+       .getLatitude()),
             String.valueOf( message.getLocation().getLongitude()),true);
         String meaasageWeather = getWeatherSaintPersburgNowFromYandexApiMessage(weather.getFact(),weather);
         SendMessage sendMessage =new SendMessage(String.valueOf(message.getChatId()),meaasageWeather);
         sendMessage.setReplyMarkup(inlineMessageButtons);
-        return sendMessage;
+        return sendMessage;*/
     }
+
     @Override
     public SendMessage handle(final long chatId, Message message) {
-     return null;
+        return getSendMessage(message);
+    }
+
+    private SendMessage getSendMessage(Message message) {
+        if (cacheUsers.getUsers().containsKey(message.getChat().getId())) {
+            Users users = cacheUsers.getUsers().get(message.getChat().getId());
+            return getSendMessage(message, users);
+        }
+        Users users = userMapper.toUsers(message);
+        return getSendMessage(message, users);
+    }
+
+    private SendMessage getSendMessage(Message message, Users users) {
+        Weather weather = weatherFeignClient.getWeather(yandexApiKey, String.valueOf(users.getLocation().getLat()),
+            String.valueOf(users.getLocation().getLon()), true);
+        String meaasageWeather = getWeatherSaintPersburgNowFromYandexApiMessage(weather.getFact(), weather);
+        SendMessage sendMessage = new SendMessage(String.valueOf(message.getChatId()), meaasageWeather);
+        sendMessage.setReplyMarkup(inlineMessageButtons);
+        return sendMessage;
     }
 
     @Override
     public BotState getHandlerName() {
-        return BotState.OTHER;
+        return BotState.YOUR_CITY;
     }
+
     private String getWeatherSaintPersburgNowFromYandexApiMessage(Fact fact, Weather weather) {
         StringBuilder weatherStringBuilder = new StringBuilder();
         weatherStringBuilder.append("Погода в вашем городе сейчас:\n");
@@ -47,8 +86,9 @@ public class WeatherOtherServiceImpl implements WeatherOtherServices {
         weatherStringBuilder.append("Давление (в мм рт. ст.): ").append(fact.getPressureMm()).append("\n");
         weatherStringBuilder.append("Влажность воздуха: ").append(fact.getHumidity()).append("%\n");
         weatherStringBuilder.append("Фазы Луны: ").append(weather.getForecastsList().get(0).getMoonCodeInText()).append("\n");
-        weatherStringBuilder.append("Восход Солнца: ").append(weather.getForecastsList().get(0).getSunrise()).append("\n");
+        weatherStringBuilder.append("Восход Солнца: ").append(weather.getForecastsList().get(0).getSunrise()).append(
+            "\n");
         weatherStringBuilder.append("Закат Солнца: ").append(weather.getForecastsList().get(0).getSunset());
-        return  weatherStringBuilder.toString();
+        return weatherStringBuilder.toString();
     }
 }

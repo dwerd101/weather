@@ -4,5 +4,5 @@ public enum BotState {
     MOSCOW,
     SAINT_PETERSBURG,
     YAROSLAVL,
-    OTHER
+    YOUR_CITY
 }

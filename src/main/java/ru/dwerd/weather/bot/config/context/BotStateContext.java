@@ -5,10 +5,10 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.dwerd.weather.bot.config.BotState;
 import ru.dwerd.weather.service.WeatherMoscowService;
-import ru.dwerd.weather.service.WeatherOtherServices;
 import ru.dwerd.weather.service.WeatherSaintPetersburgService;
 import ru.dwerd.weather.service.WeatherService;
 import ru.dwerd.weather.service.WeatherYaroslavlService;
+import ru.dwerd.weather.service.WeatherYourCityService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +25,7 @@ public class BotStateContext {
         WeatherService weatherservice = findService(currentState);
         return weatherservice.handle(message);
     }
-    public SendMessage processButton(BotState currentState, long chatId) {
+    public SendMessage processButton(BotState currentState, long chatId, Message message) {
         WeatherService currentService = findService(currentState);
         if(currentState.equals(BotState.MOSCOW)) {
             WeatherMoscowService weatherMoscowService = (WeatherMoscowService) currentService;
@@ -38,6 +38,10 @@ public class BotStateContext {
         else if(currentState.equals(BotState.YAROSLAVL)) {
             WeatherYaroslavlService weatherYaroslavlService = (WeatherYaroslavlService) currentService;
             return weatherYaroslavlService .handle(chatId);
+        }
+        else if(currentState.equals(BotState.YOUR_CITY)) {
+            WeatherYourCityService weatherYourCityService = (WeatherYourCityService) currentService;
+            return weatherYourCityService.handle(message);
         }
         else return null;
     }
