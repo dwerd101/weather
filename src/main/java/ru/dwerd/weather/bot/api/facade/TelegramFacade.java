@@ -60,6 +60,10 @@ public class TelegramFacade {
                 // case "СЕГОДНЯ":
                 botState = BotState.MOSCOW;
                 break;
+            case "/Saint_Petersburg":
+            case "/saint_petersburg":
+                botState = BotState.SAINT_PETERSBURG;
+                break;
       /*      case "/Tomorrow":
             case "/tomorrow":
             case "/tomorrow@hse_ebot":
@@ -93,11 +97,14 @@ public class TelegramFacade {
     private Optional<BotApiMethod<?>> processCallbackQuery(CallbackQuery buttonQuery) {
         final long chatId = buttonQuery.getMessage().getChatId();
         final Long userId = buttonQuery.getFrom().getId();
-
+        SendMessage replyMessage;
         switch (buttonQuery.getData()) {
             case "buttonMoscow":
               //  userDataCache.getUsersCurrentBotState(userId);
-                SendMessage replyMessage = botStateContext.processButton(BotState.MOSCOW, chatId);
+                replyMessage = botStateContext.processButton(BotState.MOSCOW, chatId);
+                return Optional.of(replyMessage);
+            case "buttonPetersburg":
+                replyMessage = botStateContext.processButton(BotState.SAINT_PETERSBURG, chatId);
                 return Optional.of(replyMessage);
         }
           /*  case "buttonTomorrow":

@@ -10,43 +10,40 @@ import ru.dwerd.weather.feign.WeatherFeignClient;
 import ru.dwerd.weather.model.Condition;
 import ru.dwerd.weather.model.Fact;
 import ru.dwerd.weather.model.Weather;
-import ru.dwerd.weather.service.WeatherMoscowService;
+import ru.dwerd.weather.service.WeatherSaintPetersburgService;
 
 import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
-public class MoscowServiceImpl implements WeatherMoscowService {
-
+public class SaintPetersburgServiceImpl implements WeatherSaintPetersburgService {
     private final WeatherFeignClient weatherFeignClient;
     private final InlineKeyboardMarkup inlineMessageButtons;
     @Override
+    public SendMessage handle(Message message) {
+        final long chatId = message.getChatId();
+        Weather weather = weatherFeignClient.getWeather("3ed5dbe8-670b-497b-99d0-350402bebb79","59.9311","30.3609",true);
+        String meaasageWeather = getWeatherSaintPersburgNowFromYandexApiMessage(weather.getFact(),weather);
+        SendMessage replyToUser = new SendMessage(String.valueOf(chatId),meaasageWeather);
+        replyToUser.setReplyMarkup(inlineMessageButtons);
+        return replyToUser;
+    }
+    @Override
     public SendMessage handle(final long chatId) {
-        Weather weather = weatherFeignClient.getWeather("3ed5dbe8-670b-497b-99d0-350402bebb79",null,null,null);
-        String meaasageWeather = getWeatherMoscowNowFromYandexApiMessage(weather.getFact(),weather);
+        Weather weather = weatherFeignClient.getWeather("3ed5dbe8-670b-497b-99d0-350402bebb79","59.9311","30.3609",true);
+        String meaasageWeather = getWeatherSaintPersburgNowFromYandexApiMessage(weather.getFact(),weather);
         SendMessage sendMessage =new SendMessage(String.valueOf(chatId),meaasageWeather);
         sendMessage.setReplyMarkup(inlineMessageButtons);
         return sendMessage;
     }
 
     @Override
-    public SendMessage handle(Message message) {
-        final long chatId = message.getChatId();
-        Weather weather = weatherFeignClient.getWeather("3ed5dbe8-670b-497b-99d0-350402bebb79", null,null,null);
-        String meaasageWeather = getWeatherMoscowNowFromYandexApiMessage(weather.getFact(),weather);
-        SendMessage replyToUser = new SendMessage(String.valueOf(chatId),meaasageWeather);
-        replyToUser.setReplyMarkup(inlineMessageButtons);
-        return replyToUser;
-    }
-
-    @Override
     public BotState getHandlerName() {
-        return BotState.MOSCOW;
+        return BotState.SAINT_PETERSBURG;
     }
-
-    private String getWeatherMoscowNowFromYandexApiMessage(Fact fact, Weather weather) {
+    private String getWeatherSaintPersburgNowFromYandexApiMessage(Fact fact, Weather weather) {
         StringBuilder weatherStringBuilder = new StringBuilder();
-        weatherStringBuilder.append("Погода в Москве сейчас:\n");
+        weatherStringBuilder.append("Погода в Санкт-Петербурге сейчас:\n");
         weatherStringBuilder.append("Температура: ").append(fact.getTemp()).append("°C\n");
         weatherStringBuilder.append("Ощущаемая температура: ").append(fact.getFeelsLike()).append("°C\n");
         Condition condition = Condition.valueOf(weather.getFact().getCondition().toUpperCase(Locale.ROOT));

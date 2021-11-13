@@ -15,10 +15,10 @@ public class InlineKeyboardMarkupConfig {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         InlineKeyboardButton buttonMoscow = new InlineKeyboardButton();
         InlineKeyboardButton buttonSaintPetersburg = new InlineKeyboardButton();
-        buttonMoscow.setText("Modcows");
+        buttonMoscow.setText("Moscow");
         buttonMoscow.setCallbackData("buttonMoscow");
         buttonSaintPetersburg.setText("Saint-Petersburg");
-        buttonSaintPetersburg.setCallbackData("buttonPeterburg");
+        buttonSaintPetersburg.setCallbackData("buttonPetersburg");
 
 
         List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();

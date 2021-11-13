@@ -4,8 +4,11 @@ import lombok.Setter;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.dwerd.weather.bot.api.facade.TelegramFacade;
+
+import java.util.Optional;
 
 @Setter
 public class WeatherTelegramBot extends TelegramWebhookBot {
@@ -32,7 +35,8 @@ public class WeatherTelegramBot extends TelegramWebhookBot {
 
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-        return null;
+        Optional<BotApiMethod<?>> replyMessageToUser = telegramFacade.handleUpdate(update);
+        return replyMessageToUser.orElse(new SendMessage());
     }
 
     @Override

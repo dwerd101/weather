@@ -1,6 +1,7 @@
 package ru.dwerd.weather.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -13,10 +14,13 @@ import lombok.experimental.FieldDefaults;
 @ToString
 public class Fact {
     Long temp;
-    Long feels_like;
+    @JsonProperty("feels_like")
+    Long feelsLike;
     String condition;
-    Long wind_speed;
-    Long pressure_mm;
+    @JsonProperty("wind_speed")
+    Long windSpeed;
+    @JsonProperty("pressure_mm")
+    Long pressureMm;
     Long humidity;
 
     public String getCondition() {
@@ -31,16 +35,16 @@ public class Fact {
         return temp;
     }
 
-    public Long getFeels_like() {
-        return feels_like;
+    public Long getFeelsLike() {
+        return feelsLike;
     }
 
-    public Long getWind_speed() {
-        return wind_speed;
+    public Long getWindSpeed() {
+        return windSpeed;
     }
 
-    public Long getPressure_mm() {
-        return pressure_mm;
+    public Long getPressureMm() {
+        return pressureMm;
     }
 
     public Long getHumidity() {
