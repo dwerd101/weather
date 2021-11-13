@@ -6,7 +6,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import ru.dwerd.weather.bot.api.model.CacheUsers;
-import ru.dwerd.weather.bot.api.model.Users;
+import ru.dwerd.weather.bot.api.model.User;
 import ru.dwerd.weather.bot.config.BotState;
 import ru.dwerd.weather.bot.mapper.UserMapper;
 import ru.dwerd.weather.feign.WeatherFeignClient;
@@ -32,8 +32,8 @@ public class WeatherYourCityServiceImpl implements WeatherYourCityService {
             return getSendMessage(message);
         } else {
             SendMessage sendMessage = new SendMessage(String.valueOf(message.getChatId()), "Вы не отправили свои " +
-                "координаты для того, поэтому узнать погоду " +
-                "невозможно.\nПожалуйста, пришлите свою геолокацию");
+                "координаты, поэтому узнать погоду " +
+                "невозможно.\nПожалуйста, пришлите свою геолокацию.");
             sendMessage.setReplyMarkup(inlineMessageButtons);
             return sendMessage;
         }
@@ -55,14 +55,14 @@ public class WeatherYourCityServiceImpl implements WeatherYourCityService {
 
     private SendMessage getSendMessage(Message message) {
         if (cacheUsers.getUsers().containsKey(message.getChat().getId())) {
-            Users users = cacheUsers.getUsers().get(message.getChat().getId());
+            User users = cacheUsers.getUsers().get(message.getChat().getId());
             return getSendMessage(message, users);
         }
-        Users users = userMapper.toUsers(message);
+        User users = userMapper.toUsers(message);
         return getSendMessage(message, users);
     }
 
-    private SendMessage getSendMessage(Message message, Users users) {
+    private SendMessage getSendMessage(Message message, User users) {
         Weather weather = weatherFeignClient.getWeather(yandexApiKey, String.valueOf(users.getLocation().getLat()),
             String.valueOf(users.getLocation().getLon()), true);
         String meaasageWeather = getWeatherSaintPersburgNowFromYandexApiMessage(weather.getFact(), weather);
@@ -88,7 +88,8 @@ public class WeatherYourCityServiceImpl implements WeatherYourCityService {
         weatherStringBuilder.append("Фазы Луны: ").append(weather.getForecastsList().get(0).getMoonCodeInText()).append("\n");
         weatherStringBuilder.append("Восход Солнца: ").append(weather.getForecastsList().get(0).getSunrise()).append(
             "\n");
-        weatherStringBuilder.append("Закат Солнца: ").append(weather.getForecastsList().get(0).getSunset());
+        weatherStringBuilder.append("Закат Солнца: ").append(weather.getForecastsList().get(0).getSunset()).append("\n\n");
+        //weatherStringBuilder.append("Если захотите поменять погоду в вашем городе, отправьте, пожалуйста, новую геопозицию");
         return weatherStringBuilder.toString();
     }
 }

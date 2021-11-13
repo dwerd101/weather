@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import ru.dwerd.weather.bot.api.model.CacheUsers;
 import ru.dwerd.weather.bot.config.BotState;
+import ru.dwerd.weather.bot.mapper.UserMapper;
 import ru.dwerd.weather.feign.WeatherFeignClient;
 import ru.dwerd.weather.model.Condition;
 import ru.dwerd.weather.model.Fact;
@@ -20,9 +22,12 @@ public class SaintPetersburgServiceImpl implements WeatherSaintPetersburgService
     private final WeatherFeignClient weatherFeignClient;
     private final InlineKeyboardMarkup inlineMessageButtons;
     private final  String yandexApiKey;
+    private final CacheUsers cacheUsers;
+    private final UserMapper userMapper;
     @Override
     public SendMessage handle(Message message) {
         final long chatId = message.getChatId();
+        cacheUsers.addHistoryUser(userMapper.toUsers(message));
         Weather weather = weatherFeignClient.getWeather(yandexApiKey,"59.9311","30.3609",true);
         String meaasageWeather = getWeatherSaintPersburgNowFromYandexApiMessage(weather.getFact(),weather);
         SendMessage replyToUser = new SendMessage(String.valueOf(chatId),meaasageWeather);
@@ -30,7 +35,8 @@ public class SaintPetersburgServiceImpl implements WeatherSaintPetersburgService
         return replyToUser;
     }
     @Override
-    public SendMessage handle(final long chatId) {
+    public SendMessage handle(final long chatId, Message message) {
+        cacheUsers.addHistoryUser(userMapper.toUsers(message));
         Weather weather = weatherFeignClient.getWeather(yandexApiKey,"59.9311","30.3609",true);
         String meaasageWeather = getWeatherSaintPersburgNowFromYandexApiMessage(weather.getFact(),weather);
         SendMessage sendMessage =new SendMessage(String.valueOf(chatId),meaasageWeather);

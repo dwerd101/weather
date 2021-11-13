@@ -25,19 +25,19 @@ public class BotStateContext {
         WeatherService weatherservice = findService(currentState);
         return weatherservice.handle(message);
     }
-    public SendMessage processButton(BotState currentState, long chatId, Message message) {
+    public SendMessage processButton(BotState currentState, Long chatId, Message message) {
         WeatherService currentService = findService(currentState);
         if(currentState.equals(BotState.MOSCOW)) {
             WeatherMoscowService weatherMoscowService = (WeatherMoscowService) currentService;
-            return weatherMoscowService.handle(chatId);
+            return weatherMoscowService.handle(chatId,message);
         }
         else if(currentState.equals(BotState.SAINT_PETERSBURG)) {
             WeatherSaintPetersburgService weatherSaintPetersburgService = (WeatherSaintPetersburgService) currentService;
-            return weatherSaintPetersburgService.handle(chatId);
+            return weatherSaintPetersburgService.handle(message);
         }
         else if(currentState.equals(BotState.YAROSLAVL)) {
             WeatherYaroslavlService weatherYaroslavlService = (WeatherYaroslavlService) currentService;
-            return weatherYaroslavlService .handle(chatId);
+            return weatherYaroslavlService .handle(message);
         }
         else if(currentState.equals(BotState.YOUR_CITY)) {
             WeatherYourCityService weatherYourCityService = (WeatherYourCityService) currentService;
