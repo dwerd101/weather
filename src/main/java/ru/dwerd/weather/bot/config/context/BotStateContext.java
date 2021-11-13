@@ -1,14 +1,16 @@
 package ru.dwerd.weather.bot.config.context;
 
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.dwerd.weather.bot.config.BotState;
+import ru.dwerd.weather.service.WeatherMoscowService;
 import ru.dwerd.weather.service.WeatherService;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+@Component
 public class BotStateContext {
     private Map<BotState, WeatherService> messageHandlers = new HashMap<>();
 
@@ -22,33 +24,16 @@ public class BotStateContext {
     }
     public SendMessage processButton(BotState currentState, long chatId) {
         WeatherService currentService = findService(currentState);
-        if(currentState.equals(BotState.TODAY)) {
-            TodayHandler todayHandler = (TodayHandler) currentService;
-            return todayHandler.handle(chatId);
+        if(currentState.equals(BotState.MOSCOW)) {
+            WeatherMoscowService weatherMoscowService = (WeatherMoscowService) currentService;
+            return weatherMoscowService.handle(chatId);
         }
-        else if(currentState.equals(BotState.TOMMOROW)) {
-            TomorrowHandler tomorrowHandler = (TomorrowHandler) currentService;
-            return tomorrowHandler.handle(chatId);
-        }
-        else if(currentState.equals(BotState.WEEK)) {
-            WeekHandler weekHandler = (WeekHandler)  currentService;
-            return weekHandler.handle(chatId);
-        }
-        else if(currentState.equals(BotState.WEATHER_TODAY)) {
-            WeatherTodayHandler weatherTodayHandler = (WeatherTodayHandler)  currentService;
-            return weatherTodayHandler.handle(chatId);
-        }
-        else if(currentState.equals(BotState.WEATHER_TODAY_AND_TOMORROW)) {
-            WeatherTodayAndTomorrowHandler weatherTodayHandler = (WeatherTodayAndTomorrowHandler)  currentService;
-            return weatherTodayHandler.handle(chatId);
-        }
-
         else return null;
     }
 
     private WeatherService findService(BotState currentState) {
         if (isUsertTelegramState(currentState)) {
-            return messageHandlers.get(BotState.NEW_USER);
+            return messageHandlers.get(BotState.MOSCOW);
         }
 
         return messageHandlers.get(currentState);
@@ -56,7 +41,7 @@ public class BotStateContext {
 
     private boolean isUsertTelegramState(BotState currentState) {
         switch (currentState) {
-            case NEW_USER:
+            case MOSCOW:
                 return true;
             default:
                 return false;

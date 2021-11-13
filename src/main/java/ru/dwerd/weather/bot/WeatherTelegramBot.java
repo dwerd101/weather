@@ -5,6 +5,7 @@ import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.dwerd.weather.bot.api.facade.TelegramFacade;
 
 @Setter
 public class WeatherTelegramBot extends TelegramWebhookBot {
@@ -13,9 +14,12 @@ public class WeatherTelegramBot extends TelegramWebhookBot {
     private String botUserName;
     private String botToken;
 
+    public  WeatherTelegramBot(DefaultBotOptions botOptions, TelegramFacade telegramFacade) {
+        super(botOptions);
+        this.telegramFacade = telegramFacade;
+    }
 
-
-    // private TelegramFacade telegramFacade;
+     private TelegramFacade telegramFacade;
     @Override
     public String getBotUsername() {
         return botUserName;

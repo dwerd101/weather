@@ -15,12 +15,13 @@ import ru.dwerd.weather.bot.api.facade.TelegramFacade;
 @Configuration
 @ConfigurationProperties(prefix = "telegrambot")
 public class BotConfig {
-    @Value("${telegrambot.webHookPathw}")
+    @Value("${telegrambot.webHookPath}")
     private String webHookPath;
     @Value("${telegrambot.userName}")
     private String botUserName;
     @Value("${telegrambot.botToken}")
     private String botToken;
+
     @Bean
     public WeatherTelegramBot myWizardTelegramBot(TelegramFacade telegramFacade) {
         DefaultBotOptions options = new DefaultBotOptions();
@@ -30,3 +31,4 @@ public class BotConfig {
         mySuperTelegramBot.setWebHookPath(webHookPath);
         return mySuperTelegramBot;
     }
+}

@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.dwerd.weather.bot.config.BotState;
 import ru.dwerd.weather.bot.config.context.BotStateContext;
 
 
@@ -18,7 +19,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class TelegramFacade {
     private final BotStateContext botStateContext;
-    private final UserDataCache userDataCache;
+    //private final UserDataCache userDataCache;
 
 
     public Optional<BotApiMethod<?>> handleUpdate(Update update) {
@@ -51,15 +52,15 @@ public class TelegramFacade {
 
         switch (inputMsg) {
             case "/start":
-                botState = BotState.NEW_USER;
+                botState = BotState.MOSCOW;
                 break;
-            case "/Today":
-            case "/today":
-            case "/today@hse_ebot":
+            case "/Moscow":
+            case "/moscow":
+           // case "/today@hse_ebot":
                 // case "СЕГОДНЯ":
-                botState = BotState.TODAY;
+                botState = BotState.MOSCOW;
                 break;
-            case "/Tomorrow":
+      /*      case "/Tomorrow":
             case "/tomorrow":
             case "/tomorrow@hse_ebot":
                 botState = BotState.TOMMOROW;
@@ -76,12 +77,13 @@ public class TelegramFacade {
             case "/wmtodtom@hse_ebot":
                 botState = BotState.WEATHER_TODAY_AND_TOMORROW;
                 break;
+                */
             default:
                 return Optional.empty();
 
         }
 
-        userDataCache.setUsersCurrentBotState(userId, botState);
+       // userDataCache.setUsersCurrentBotState(userId, botState);
 
         replyMessage = botStateContext.processInputMessage(botState, message);
 
@@ -93,11 +95,12 @@ public class TelegramFacade {
         final Long userId = buttonQuery.getFrom().getId();
 
         switch (buttonQuery.getData()) {
-            case "buttonToday":
-                userDataCache.getUsersCurrentBotState(userId);
-                SendMessage replyMessage = botStateContext.processButton(BotState.TODAY, chatId);
+            case "buttonMoscow":
+              //  userDataCache.getUsersCurrentBotState(userId);
+                SendMessage replyMessage = botStateContext.processButton(BotState.MOSCOW, chatId);
                 return Optional.of(replyMessage);
-            case "buttonTomorrow":
+        }
+          /*  case "buttonTomorrow":
                 userDataCache.getUsersCurrentBotState(userId);
                 replyMessage = botStateContext.processButton(BotState.TOMMOROW, chatId);
                 return Optional.of(replyMessage);
@@ -113,7 +116,7 @@ public class TelegramFacade {
                 userDataCache.getUsersCurrentBotState(userId);
                 replyMessage = botStateContext.processButton(BotState.WEATHER_TODAY_AND_TOMORROW, chatId);
                 return Optional.of(replyMessage);
-        }
+        } */
         return Optional.empty();
     }
 }
