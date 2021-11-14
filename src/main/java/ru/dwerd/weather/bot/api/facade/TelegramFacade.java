@@ -95,9 +95,12 @@ public class TelegramFacade {
                 break;
             case "/your_city":
             case "/Your_city":
-            case"/your_city@over_weather_bot":
                 botState = BotState.YOUR_CITY;
                 break;
+            case"/your_city@over_weather_bot":
+                replyMessage = new SendMessage(String.valueOf(message.getChatId()),
+                    "Данная функция не работает в групповых чатах");
+                return Optional.of(replyMessage);
             case "/how_change_weather@over_weather_bot":
             case "/how_change_weather":
             case "/How_Change_Weather":
