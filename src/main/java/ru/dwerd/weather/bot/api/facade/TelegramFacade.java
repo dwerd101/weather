@@ -105,7 +105,8 @@ public class TelegramFacade {
             case "/how_change_weather":
             case "/How_Change_Weather":
                 replyMessage = new SendMessage(String.valueOf(message.getChatId()),
-                    "Если захотите поменять погоду в вашем городе, пожалуйста, отправьте новую геопозицию");
+                    "Если захочешь поменять погоду в своем городе, пожалуйста, отправь новую геопозицию\n" +
+                        "\"Для этого нажми на \\\"булавку\\\" и выбери раздел \\\"геопозиция\\\"");
                 return Optional.of(replyMessage);
             default:
                 return Optional.empty();
