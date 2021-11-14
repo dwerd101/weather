@@ -12,14 +12,14 @@ public class WeatherHelloServiceImpl implements WeatherHelloService {
     @Override
     public SendMessage handle(long chatId, Message message) {
         return new SendMessage(String.valueOf(chatId),"Привет! Хочешь узнать погоду? Нажми на одну из этих кнопок:\n " +
-            "Ярослваль;\nМосква;Санкт-Петербург.\n Хочешь добавить свою погоду? Пришли мне свою геопозицию.\n" +
+            "Ярослваль;\nМосква;\nСанкт-Петербург.\nХочешь добавить свою погоду? Пришли мне свою геопозицию.\n" +
             "Для этого нажми на \"булавку\" и выбери раздел \"геопозиция\"");
     }
 
     @Override
     public SendMessage handle(Message message) {
         return new SendMessage(String.valueOf(message.getChatId()),"Привет! Хочешь узнать погоду? Нажми на одну из этих кнопок:\n " +
-            "Ярослваль;\nМосква;Санкт-Петербург.\n Хочешь добавить свою погоду? Пришли мне свою геопозицию.\n" +
+            "Ярослваль;\nМосква;\nСанкт-Петербург.\nХочешь добавить свою погоду? Пришли мне свою геопозицию.\n" +
             "Для этого нажми на \"булавку\" и выбери раздел \"геопозиция\"");
     }
 
