@@ -33,7 +33,8 @@ public class WeatherYourCityServiceImpl implements WeatherYourCityService {
         } else {
             SendMessage sendMessage = new SendMessage(String.valueOf(message.getChatId()), "Вы не отправили свои " +
                 "координаты, поэтому узнать погоду " +
-                "невозможно.\nПожалуйста, пришлите свою геолокацию.");
+                "невозможно.\nПожалуйста, пришлите свою геолокацию.\nДля этого нажми на \"булавку\" и выбери раздел " +
+                "\"геопозиция\"");
             sendMessage.setReplyMarkup(inlineMessageButtons);
             return sendMessage;
         }
