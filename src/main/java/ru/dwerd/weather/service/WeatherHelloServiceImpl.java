@@ -11,7 +11,7 @@ import ru.dwerd.weather.bot.config.BotState;
 public class WeatherHelloServiceImpl implements WeatherHelloService {
     @Override
     public SendMessage handle(long chatId, Message message) {
-        return new SendMessage(String.valueOf(chatId),"Привет! Хочешь узнать погоду? Нажми на одну из этих кнопок: " +
+        return new SendMessage(String.valueOf(chatId),"Привет! Хочешь узнать погоду? Нажми на одну из этих кнопок:\n " +
             "Ярослваль;\nМосква;Санкт-Петербург.\n Хочешь добавить свою погоду? Пришли мне свою геопозицию.");
     }
 
