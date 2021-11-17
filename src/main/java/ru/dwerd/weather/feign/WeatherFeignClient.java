@@ -13,7 +13,7 @@ public interface WeatherFeignClient {
 
     //?lat=55.75396&lon=37.620393&extra=true
     @RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET,value = "/")
-    Weather getWeather(@RequestHeader("X-Yandex-API-Key") String header, @RequestParam(value = "lat",defaultValue = "55.7539" )
+    Weather getWeather(@RequestHeader("X-Yandex-API-Key") String header, @RequestParam(value = "lat",defaultValue = "55.75396" )
                              String lat, @RequestParam(value = "lon",defaultValue = "37.62039" ) String lon,
                        @RequestParam(value = "extra", defaultValue = "true") Boolean extra);
 

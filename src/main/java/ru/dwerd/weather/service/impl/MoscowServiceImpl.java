@@ -28,7 +28,7 @@ public class MoscowServiceImpl implements WeatherMoscowService {
     @Override
     public SendMessage handle(final long chatId, Message message) {
         cacheUsers.addHistoryUser(userMapper.toUsers(message));
-        Weather weather = weatherFeignClient.getWeather(yandexApiKey,null,null,null);
+        Weather weather = weatherFeignClient.getWeather(yandexApiKey,"55.75396","37.62039",null);
         String meaasageWeather = getWeatherMoscowNowFromYandexApiMessage(weather.getFact(),weather);
         SendMessage sendMessage =new SendMessage(String.valueOf(chatId),meaasageWeather);
         sendMessage.setReplyMarkup(inlineMessageButtons);
@@ -39,7 +39,7 @@ public class MoscowServiceImpl implements WeatherMoscowService {
     public SendMessage handle(Message message) {
         final long chatId = message.getChatId();
         cacheUsers.addHistoryUser(userMapper.toUsers(message));
-        Weather weather = weatherFeignClient.getWeather(yandexApiKey, null,null,null);
+        Weather weather = weatherFeignClient.getWeather(yandexApiKey, "55.75396","37.62039"null);
         String meaasageWeather = getWeatherMoscowNowFromYandexApiMessage(weather.getFact(),weather);
         SendMessage replyToUser = new SendMessage(String.valueOf(chatId),meaasageWeather);
         replyToUser.setReplyMarkup(inlineMessageButtons);
